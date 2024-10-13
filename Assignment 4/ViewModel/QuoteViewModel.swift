@@ -7,7 +7,6 @@ class QuoteViewModel: ObservableObject {
 
     func fetchQuote(forMood mood: String) async {
         do {
-            // Fetch and unwrap the first quote if available
             if let quotes = try await APIService.shared.fetchQuote(forMood: mood), let firstQuote = quotes.first {
                 self.quote = firstQuote
             } else {
