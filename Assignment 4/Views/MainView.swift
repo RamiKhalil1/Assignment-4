@@ -26,6 +26,14 @@ struct MainView: View {
                         .foregroundColor(.white)
                         .cornerRadius(8)
                 }
+                
+                NavigationLink(destination: SavedEntriesView()) {
+                    Text("View Saved Data")
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
             }
             .navigationTitle("Daily Mood Journal")
         }

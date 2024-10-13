@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import UIKit
 
 struct PersistenceController {
     static let shared = PersistenceController()
@@ -25,13 +26,17 @@ struct PersistenceController {
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
     
-    func saveMoodEntry(date: Date, mood: String, notes: String?, photo: Data?) {
+    func saveMoodEntry(date: Date, mood: String, quoteText: String?, quoteAuthor: String?, photo: UIImage?) {
         let viewContext = container.viewContext
         let moodEntry = Mood(context: viewContext)
         moodEntry.date = date
         moodEntry.mood = mood
-        moodEntry.notes = notes
-        moodEntry.photo = photo
+        moodEntry.quoteText = quoteText
+        moodEntry.quoteAuthor = quoteAuthor
+        
+        if let photo = photo, let imageData = photo.jpegData(compressionQuality: 1.0) {
+            moodEntry.photo = imageData
+        }
         
         do {
             try viewContext.save()
