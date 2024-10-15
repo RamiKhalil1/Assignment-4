@@ -11,6 +11,7 @@ struct CalendarView: View {
     let columns = Array(repeating: GridItem(.flexible()), count: 7)
     @State private var days: [Date] = []
     @State private var date: Date = Date.now
+    @State private var entriesDates: [Date] = []
     
     var body: some View {
         VStack {
@@ -76,7 +77,32 @@ struct CalendarView: View {
                     }
                 }
                 
+                Spacer()
                 
+                Button(){
+                    if selectedMonth > 1 {
+                        selectedMonth -= 1
+                    } else {
+                        selectedYear -= 1
+                        selectedMonth = 12
+                    }
+                    date = updateDateForNewMonthOrYear(newMonth: selectedMonth, newYear: selectedYear, date: date)
+                    days = date.calendarDisplayDays
+                } label: {
+                    Image(systemName: "arrowshape.backward.fill")
+                }
+                Button(){
+                    if selectedMonth < 12 {
+                        selectedMonth += 1
+                    } else {
+                        selectedYear += 1
+                        selectedMonth = 1
+                    }
+                    date = updateDateForNewMonthOrYear(newMonth: selectedMonth, newYear: selectedYear, date: date)
+                    days = date.calendarDisplayDays
+                } label: {
+                    Image(systemName: "arrowshape.forward.fill")
+                }
             }
             .padding()
             
@@ -95,20 +121,21 @@ struct CalendarView: View {
                     if day.monthInt != date.monthInt {
                         Text("")
                     } else {
+                        let isCurrentDay = date.startOfDay == day.startOfDay
+                        let isEntryDate = entriesDates.contains(day)
+                        
+                        // Define background color separately to simplify the expression
+                        let backgroundColor: Color = isCurrentDay ? Color.red.opacity(0.2) :
+                            isEntryDate ? Color.blue.opacity(0.2) :
+                            Color.green.opacity(0.2)
+                        
                         Text(day.formatted(.dateTime.day()))
                             .fontWeight(.bold)
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity, minHeight: 40)
                             .background(
                                 Circle()
-                                    .foregroundColor(
-                                        
-                                        //Background for current day
-                                        date.startOfDay == day.startOfDay
-                                        ? Color.red.opacity(0.2):
-                                            
-                                        // Background modifies for each date
-                                        .green.opacity(0.2))
+                                    .foregroundColor(backgroundColor)
                             )
                         .onTapGesture {
                             date = day.startOfDay
@@ -119,6 +146,7 @@ struct CalendarView: View {
             .padding()
             .onAppear {
                 days = date.calendarDisplayDays
+                updateEntriesDatesIfNeeded()
             }
             
             List {
@@ -161,6 +189,11 @@ struct CalendarView: View {
         }
         .padding()
         .navigationTitle("Mood Calendar")
+    }
+    
+    private func updateEntriesDatesIfNeeded() {
+        guard entriesDates.isEmpty else { return }
+        entriesDates = getEntriesDate(moodEntries: moodEntries)
     }
 }
 
