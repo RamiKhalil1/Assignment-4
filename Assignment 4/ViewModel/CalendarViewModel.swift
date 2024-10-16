@@ -25,7 +25,7 @@ func updateDateForNewMonthOrYear(newMonth: Int, newYear: Int, date: Date) -> Dat
     return Calendar.current.date(from: DateComponents(year: newYear, month: newMonth, day: newDay))!
 }
 
-func getEntriesDate(moodEntries: [Mood]) -> [Date] {
+func getEntriesDate(moodEntries: FetchedResults<Mood>) -> [Date] {
     var entriesDates: [Date] = []
     for mood in moodEntries {
         if let date = mood.date, !entriesDates.contains(date.startOfDay) {

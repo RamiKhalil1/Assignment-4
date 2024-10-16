@@ -1,7 +1,10 @@
 import SwiftUI
 
 struct CalendarView: View {
-    @State private var moodEntries = PersistenceController.shared.fetchMoodEntries()
+    @FetchRequest(
+        entity: Mood.entity(),
+        sortDescriptors: [NSSortDescriptor(keyPath: \Mood.date, ascending: false)]
+    ) var moodEntries: FetchedResults<Mood>
     @State private var selectedMonth = Calendar.current.component(.month, from: Date())
     @State private var selectedYear = Calendar.current.component(.year, from: Date())
     
@@ -15,15 +18,6 @@ struct CalendarView: View {
     
     var body: some View {
         VStack {
-//            LazyVGrid(columns: Array(repeating: .init(), count: 7)) {
-//                ForEach(moodEntries, id: \.date) { entry in
-//                    Text(entry.mood ?? "")
-//                        .frame(width: 40, height: 40)
-//                        .background(Color.gray.opacity(0.2))
-//                        .cornerRadius(5)
-//                }
-//            }
-            
             HStack {
                 // Month Button
                 Button(action: {
