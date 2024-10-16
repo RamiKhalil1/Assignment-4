@@ -61,7 +61,7 @@ struct CalendarView: View {
                             }
                         }
                         .pickerStyle(WheelPickerStyle())
-                        .onChange(of: selectedMonth) {
+                        .onChange(of: selectedYear) {
                             date = updateDateForNewMonthOrYear(newMonth: selectedMonth, newYear: selectedYear, date				: date)
                             days = date.calendarDisplayDays
                         }
