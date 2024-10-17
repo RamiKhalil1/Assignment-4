@@ -4,6 +4,7 @@ struct QuoteBasedOnMood: View {
     @State private var selectedCategory: String = "happiness"
     @State private var showImagePicker = false
     @State private var selectedImage: UIImage?
+    @State private var journalText: String = ""
     @StateObject private var quoteManager = QuoteViewModel()
 
     let categories = [
@@ -59,6 +60,17 @@ struct QuoteBasedOnMood: View {
                             .cornerRadius(10)
                             .shadow(radius: 5)
                     }
+                    
+                    Section(header: Text("Journal Entry")
+                        .font(.headline)
+                        .foregroundColor(.white)) {
+                            TextEditor(text: $journalText)
+                                .frame(height: 150)
+                                .padding()
+                                .background(Color.white.opacity(0.2))
+                                .cornerRadius(10)
+                        }
+                                            
                     
                     Button(action: {
                         showImagePicker = true
@@ -124,7 +136,8 @@ struct QuoteBasedOnMood: View {
                                 mood: selectedCategory,
                                 quoteText: quote.quote,
                                 quoteAuthor: quote.author,
-                                photo: selectedImage
+                                photo: selectedImage,
+                                journalText: journalText
                             )
                         }
                         .padding()

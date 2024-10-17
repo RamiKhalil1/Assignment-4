@@ -37,13 +37,11 @@ extension Date {
 
     var calendarDisplayDays: [Date] {
         var days: [Date] = []
-        // Current month days
         for dayOffset in 0..<numberOfDaysInMonth {
             let newDay = Calendar.current.date(byAdding: .day, value: dayOffset, to: startOfMonth)!
             days.append(newDay)
         }
         
-        // Previous month days
         for dayOffset in 0..<startOfPreviousMonth.numberOfDaysInMonth {
             let newDay = Calendar.current.date(byAdding: .day, value: dayOffset, to: startOfPreviousMonth)!
             days.append(newDay)

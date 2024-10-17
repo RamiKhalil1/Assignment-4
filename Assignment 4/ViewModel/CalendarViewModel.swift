@@ -5,10 +5,9 @@ let months = Array(1...12)
 let years = Array(1900...2100)
 let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
-// Number formatter to avoid commas in year
 var yearFormatter: NumberFormatter {
     let formatter = NumberFormatter()
-    formatter.usesGroupingSeparator = false // Disable grouping (comma separator)
+    formatter.usesGroupingSeparator = false
     return formatter
 }
 
@@ -21,7 +20,6 @@ func updateDateForNewMonthOrYear(newMonth: Int, newYear: Int, date: Date) -> Dat
     if newDay > numberOfDaysInNewMonth! {
        newDay = numberOfDaysInNewMonth!
     }
-    // Update the `date` with the new components
     return Calendar.current.date(from: DateComponents(year: newYear, month: newMonth, day: newDay))!
 }
 

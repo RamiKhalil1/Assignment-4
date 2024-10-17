@@ -1,10 +1,3 @@
-//
-//  Assignment_4App.swift
-//  Assignment 4
-//
-//  Created by Rami Khalil on 9/10/2024.
-//
-
 import SwiftUI
 
 @main

@@ -3,6 +3,7 @@
     <entity name="Entity" representedClassName="Entity" syncable="YES" codeGenerationType="class"/>
     <entity name="Mood" representedClassName="Mood" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="journalText" optional="YES" attributeType="String"/>
         <attribute name="mood" optional="YES" attributeType="String"/>
         <attribute name="photo" optional="YES" attributeType="Binary"/>
         <attribute name="quoteAuthor" optional="YES" attributeType="String"/>
