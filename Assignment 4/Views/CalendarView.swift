@@ -146,39 +146,9 @@ struct CalendarView: View {
             List {
                 ForEach(moodEntries, id: \.self) { entry in
                     if Calendar.current.isDate(entry.date ?? Date(), inSameDayAs: date) {
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("Category: \(entry.mood ?? "Unknown")")
-                                .font(.headline)
-                            
-                            if let quoteText = entry.quoteText {
-                                Text("\"\(quoteText)\"")
-                                    .font(.body)
-                                    .foregroundColor(.primary)
-                                    .italic()
-                            }
-                            
-                            if let author = entry.quoteAuthor {
-                                Text("- \(author)")
-                                    .font(.footnote)
-                                    .foregroundColor(.secondary)
-                                    .italic()
-                            }
-                            
-                            if let imageData = entry.photo, let uiImage = UIImage(data: imageData) {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(maxHeight: 150)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 5)
-                            }
-                        }
-                        .padding()
-                        .background(Color.blue.opacity(0.1))
-                        .cornerRadius(10)
-                        .padding(.vertical, 5)
+                        EntryView(entry: entry)
                     }
-                }
+                }.onDelete(perform: deleteEntries)
             }
         }
         .padding()
@@ -188,6 +158,13 @@ struct CalendarView: View {
     private func updateEntriesDatesIfNeeded() {
         guard entriesDates.isEmpty else { return }
         entriesDates = getEntriesDate(moodEntries: moodEntries)
+    }
+    
+    private func deleteEntries(at offsets: IndexSet) {
+        for index in offsets {
+            let entry = moodEntries[index]
+            PersistenceController.shared.deleteMoodEntry(entry)
+        }
     }
 }
 
