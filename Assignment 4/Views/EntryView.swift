@@ -1,7 +1,9 @@
 import SwiftUI
+import UIKit
 
 struct EntryView: View {
     var entry: Mood
+    @State private var isShareSheetPresented = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -61,6 +63,12 @@ struct EntryView: View {
         .background(Color.blue.opacity(0.1))
         .cornerRadius(10)
         .padding(.vertical, 5)
+        .onLongPressGesture {
+            presentShareSheet()
+        }
+        .sheet(isPresented: $isShareSheetPresented, content: {
+            ActivityViewController(activityItems: [shareContent()])
+        })
     }
     
     private func formattedDate(_ date: Date) -> String {
@@ -69,6 +77,40 @@ struct EntryView: View {
         formatter.timeStyle = .short
         return formatter.string(from: date)
     }
+
+    private func presentShareSheet() {
+        isShareSheetPresented = true
+    }
+
+    private func shareContent() -> String {
+        var content = ""
+        if let date = entry.date {
+            content += "Date: \(formattedDate(date))\n"
+        }
+        content += "Category: \(entry.mood ?? "Unknown")\n"
+        if let quoteText = entry.quoteText {
+            content += "\"\(quoteText)\"\n"
+        }
+        if let author = entry.quoteAuthor {
+            content += "- \(author)\n"
+        }
+        if let journalText = entry.journalText, !journalText.isEmpty {
+            content += "\nJournal:\n\(journalText)"
+        }
+        return content
+    }
+}
+
+struct ActivityViewController: UIViewControllerRepresentable {
+    var activityItems: [Any]
+    var applicationActivities: [UIActivity]? = nil
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
 #Preview {
