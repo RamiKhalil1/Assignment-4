@@ -4,6 +4,7 @@ import UIKit
 struct EntryView: View {
     var entry: Mood
     @State private var isShareSheetPresented = false
+    @State private var isNavigationActive = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -53,7 +54,7 @@ struct EntryView: View {
                     .shadow(radius: 5)
             }
 
-            NavigationLink(destination: EditMoodView(entry: entry)) {
+            NavigationLink(destination: EditMoodView(entry: entry), isActive: $isNavigationActive) {
                 Text("Edit")
                     .font(.headline)
                     .foregroundColor(.blue)
@@ -63,6 +64,9 @@ struct EntryView: View {
         .background(Color.blue.opacity(0.1))
         .cornerRadius(10)
         .padding(.vertical, 5)
+        .onTapGesture {
+            isNavigationActive = true
+        }
         .onLongPressGesture {
             presentShareSheet()
         }
