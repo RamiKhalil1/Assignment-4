@@ -19,7 +19,6 @@ struct CalendarView: View {
     var body: some View {
         VStack {
             HStack {
-                // Month Button
                 Button(action: {
                     isMonthPickerPresented.toggle()
                 }) {
@@ -45,7 +44,6 @@ struct CalendarView: View {
                     }
                 }
                 
-                // Year Button
                 Button(action: {
                     isYearPickerPresented.toggle()
                 }) {
@@ -118,7 +116,6 @@ struct CalendarView: View {
                         let isCurrentDay = date.startOfDay == day.startOfDay
                         let isEntryDate = entriesDates.contains(day)
                         
-                        // Define background color separately to simplify the expression
                         let backgroundColor: Color = isCurrentDay ? Color.red.opacity(0.2) :
                             isEntryDate ? Color.blue.opacity(0.2) :
                             Color.green.opacity(0.2)

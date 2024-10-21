@@ -6,40 +6,55 @@ struct MainView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                List(moodEntries, id: \.date) { entry in
-                    Text("Mood: \(entry.mood ?? "") on \(entry.date ?? Date())")
-                }
-                
-                NavigationLink(destination: CalendarView()) {
-                    Text("View Calendar")
-                        .padding()
-                        .background(Color.blue)
+            ZStack {
+                LinearGradient(gradient: Gradient(colors: [.blue, .purple]), startPoint: .top, endPoint: .bottom)
+                    .ignoresSafeArea()
+
+                VStack(spacing: 20) {
+                    Text("Daily Mood Journal")
+                        .font(.system(size: 32, weight: .bold))
                         .foregroundColor(.white)
-                        .cornerRadius(8)
+                        .shadow(radius: 10)
+
+                    NavigationLink(destination: CalendarView()) {
+                        GradientButton(title: "View Calendar", systemImage: "calendar")
+                    }
+
+                    NavigationLink(destination: QuoteBasedOnMood()) {
+                        GradientButton(title: "Generate Quote Based on Mood", systemImage: "lightbulb")
+                    }
+
+                    NavigationLink(destination: SavedEntriesView()) {
+                        GradientButton(title: "View Saved Data", systemImage: "folder")
+                    }
                 }
-                
-                NavigationLink(destination: QuoteBasedOnMood()) {
-                    Text("Generate quote based on mood")
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                }
-                
-                NavigationLink(destination: SavedEntriesView()) {
-                    Text("View Saved Data")
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                }
+                .padding()
             }
-            .navigationTitle("Daily Mood Journal")
         }
     }
 }
 
-#Preview {
-    MainView()
+struct GradientButton: View {
+    var title: String
+    var systemImage: String
+
+    var body: some View {
+        HStack {
+            Image(systemName: systemImage)
+                .font(.headline)
+                .foregroundColor(.white)
+            
+            Text(title)
+                .font(.headline)
+                .foregroundColor(.white)
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(
+            LinearGradient(gradient: Gradient(colors: [.purple, .blue]), startPoint: .leading, endPoint: .trailing)
+        )
+        .cornerRadius(15)
+        .shadow(radius: 5)
+        .padding(.horizontal)
+    }
 }

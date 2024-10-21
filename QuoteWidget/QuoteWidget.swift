@@ -26,10 +26,6 @@ struct Provider: AppIntentTimelineProvider {
             }
             return SimpleEntry(date: Date(), mood: selectedMood, quote: "Error fetching quote", author: "Unknown")
         }
-
-//    func relevances() async -> WidgetRelevances<ConfigurationAppIntent> {
-//        // Generate a list containing the contexts this widget is relevant in.
-//    }
 }
 
 struct SimpleEntry: TimelineEntry {
@@ -79,13 +75,11 @@ struct QuoteWidget: Widget {
 extension ConfigurationAppIntent {
     fileprivate static var smiley: ConfigurationAppIntent {
         let intent = ConfigurationAppIntent()
-//        intent.favoriteEmoji = "😀"
         return intent
     }
     
     fileprivate static var starEyes: ConfigurationAppIntent {
         let intent = ConfigurationAppIntent()
-//        intent.favoriteEmoji = "🤩"
         return intent
     }
 }

@@ -167,7 +167,3 @@ struct QuoteBasedOnMood: View {
         }
     }
 }
-
-#Preview{
-    QuoteBasedOnMood()
-}

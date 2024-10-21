@@ -5,29 +5,30 @@ struct EntryView: View {
     var entry: Mood
     @State private var isShareSheetPresented = false
     @State private var isNavigationActive = false
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             if let date = entry.date {
                 Text("Date: \(formattedDate(date))")
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.white)
             }
             
             Text("Category: \(entry.mood ?? "Unknown")")
                 .font(.headline)
+                .foregroundColor(.white)
             
             if let quoteText = entry.quoteText {
                 Text("\"\(quoteText)\"")
                     .font(.body)
-                    .foregroundColor(.primary)
+                    .foregroundColor(.white)
                     .italic()
             }
             
             if let author = entry.quoteAuthor {
                 Text("- \(author)")
                     .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.white.opacity(0.8))
                     .italic()
             }
             
@@ -35,11 +36,11 @@ struct EntryView: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Journal:")
                         .font(.headline)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.white.opacity(0.8))
                     
                     Text(journalText)
                         .font(.body)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.white.opacity(0.9))
                         .padding(.leading, 5)
                 }
                 .padding(.top, 5)
@@ -50,19 +51,27 @@ struct EntryView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(maxHeight: 150)
-                    .cornerRadius(10)
+                    .cornerRadius(12)
                     .shadow(radius: 5)
+                    .padding(.top, 5)
             }
 
             NavigationLink(destination: EditMoodView(entry: entry), isActive: $isNavigationActive) {
                 Text("Edit")
                     .font(.headline)
-                    .foregroundColor(.blue)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(
+                        LinearGradient(gradient: Gradient(colors: [.purple, .blue]), startPoint: .leading, endPoint: .trailing)
+                    )
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
             }
         }
         .padding()
-        .background(Color.blue.opacity(0.1))
-        .cornerRadius(10)
+        .background(Color.black.opacity(0.7))
+        .cornerRadius(12)
         .padding(.vertical, 5)
         .onTapGesture {
             isNavigationActive = true
@@ -74,7 +83,7 @@ struct EntryView: View {
             ActivityViewController(activityItems: [shareContent()])
         })
     }
-    
+
     private func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
@@ -115,8 +124,4 @@ struct ActivityViewController: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
-
-#Preview {
-    EntryView(entry: Mood())
 }
