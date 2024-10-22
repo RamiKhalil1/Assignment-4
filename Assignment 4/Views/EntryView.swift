@@ -5,6 +5,8 @@ struct EntryView: View {
     var entry: Mood
     @State private var isShareSheetPresented = false
     @State private var isNavigationActive = false
+    
+    @Binding public var isReload: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -56,7 +58,7 @@ struct EntryView: View {
                     .padding(.top, 5)
             }
 
-            NavigationLink(destination: EditMoodView(entry: entry), isActive: $isNavigationActive) {
+            NavigationLink(destination: EditMoodView(entry: entry, isReload: $isReload), isActive: $isNavigationActive) {
                 Text("Edit")
                     .font(.headline)
                     .frame(maxWidth: .infinity)

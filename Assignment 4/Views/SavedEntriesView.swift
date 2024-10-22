@@ -8,6 +8,9 @@ struct SavedEntriesView: View {
         animation: .default
     ) var moodEntries: FetchedResults<Mood>
     
+    @State public var isReload: Bool = false
+    @State public var fetchTrigger = UUID()
+    
     var body: some View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [.purple, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing)
@@ -23,7 +26,7 @@ struct SavedEntriesView: View {
                 } else {
                     List {
                         ForEach(moodEntries, id: \.self) { entry in
-                            EntryView(entry: entry)
+                            EntryView(entry: entry, isReload: $isReload)
                                 .listRowBackground(Color.clear)
                         }
                         .onDelete(perform: deleteEntries)
@@ -34,7 +37,14 @@ struct SavedEntriesView: View {
             }
             .padding()
             .navigationTitle("Saved Entries")
+            .onChange(of: isReload) { newValue in
+                if newValue {
+                    fetchTrigger = UUID()
+                    isReload = false
+                }
+            }
         }
+        .id(fetchTrigger)
     }
 
     private func deleteEntries(at offsets: IndexSet) {

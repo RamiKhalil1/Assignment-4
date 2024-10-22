@@ -16,85 +16,17 @@ struct CalendarView: View {
     @State private var date: Date = Date.now
     @State private var entriesDates: [Date] = []
     
+    @State public var isReload: Bool = false
+    @State public var fetchTrigger = UUID()
+    
     var body: some View {
         VStack {
             HStack {
-                Button(action: {
-                    isMonthPickerPresented.toggle()
-                }) {
-                    Text("\(DateFormatter().monthSymbols[selectedMonth - 1])")
-                        .font(.system(size: 18))
-                        .foregroundColor(.blue)
-                }
-                .sheet(isPresented: $isMonthPickerPresented) {
-                    VStack {
-                        Picker(selection: $selectedMonth, label: Text("Month")) {
-                            ForEach(1..<13) { month in
-                                Text("\(DateFormatter().monthSymbols[month - 1])").tag(month)
-                            }
-                        }
-                        .pickerStyle(WheelPickerStyle())
-                        .onChange(of: selectedMonth) {
-                            date = updateDateForNewMonthOrYear(newMonth: selectedMonth, newYear: selectedYear, date: date)
-                            days = date.calendarDisplayDays
-                        }
-                        Button("Done") {
-                            isMonthPickerPresented = false
-                        }
-                    }
-                }
-                
-                Button(action: {
-                    isYearPickerPresented.toggle()
-                }) {
-                    Text(yearFormatter.string(from: NSNumber(value: selectedYear)) ?? "\(selectedYear)")
-                        .font(.system(size: 18))
-                        .foregroundColor(.blue)
-                }
-                .sheet(isPresented: $isYearPickerPresented) {
-                    VStack {
-                        Picker(selection: $selectedYear, label: Text("Year")) {
-                            ForEach(years, id: \.self) { year in
-                                Text(yearFormatter.string(from: NSNumber(value: year)) ?? "\(year)").tag(year)
-                            }
-                        }
-                        .pickerStyle(WheelPickerStyle())
-                        .onChange(of: selectedYear) {
-                            date = updateDateForNewMonthOrYear(newMonth: selectedMonth, newYear: selectedYear, date				: date)
-                            days = date.calendarDisplayDays
-                        }
-                        Button("Done") {
-                            isYearPickerPresented = false
-                        }
-                    }
-                }
-                
+                MonthYearPickerView(selectedMonth: $selectedMonth, selectedYear: $selectedYear, date: $date, days: $days)
+                            
                 Spacer()
                 
-                Button(){
-                    if selectedMonth > 1 {
-                        selectedMonth -= 1
-                    } else {
-                        selectedYear -= 1
-                        selectedMonth = 12
-                    }
-                    date = updateDateForNewMonthOrYear(newMonth: selectedMonth, newYear: selectedYear, date: date)
-                    days = date.calendarDisplayDays
-                } label: {
-                    Image(systemName: "arrowshape.backward.fill")
-                }
-                Button(){
-                    if selectedMonth < 12 {
-                        selectedMonth += 1
-                    } else {
-                        selectedYear += 1
-                        selectedMonth = 1
-                    }
-                    date = updateDateForNewMonthOrYear(newMonth: selectedMonth, newYear: selectedYear, date: date)
-                    days = date.calendarDisplayDays
-                } label: {
-                    Image(systemName: "arrowshape.forward.fill")
-                }
+                
             }
             .padding()
             
@@ -143,13 +75,20 @@ struct CalendarView: View {
             List {
                 ForEach(moodEntries, id: \.self) { entry in
                     if Calendar.current.isDate(entry.date ?? Date(), inSameDayAs: date) {
-                        EntryView(entry: entry)
+                        EntryView(entry: entry, isReload: $isReload)
                     }
                 }.onDelete(perform: deleteEntries)
             }
         }
         .padding()
         .navigationTitle("Mood Calendar")
+        .onChange(of: isReload) { newValue in
+            if newValue {
+                fetchTrigger = UUID()
+                isReload = false
+            }
+        }
+        .id(fetchTrigger)
     }
     
     private func updateEntriesDatesIfNeeded() {
