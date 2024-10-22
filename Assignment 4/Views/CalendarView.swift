@@ -34,7 +34,7 @@ struct CalendarView: View {
                 ForEach(daysOfWeek.indices, id: \.self) { index in
                     Text(daysOfWeek[index])
                         .fontWeight(.black)
-                        .foregroundStyle(Color.green)
+                        .foregroundStyle(Color.white)
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -66,7 +66,9 @@ struct CalendarView: View {
                     }
                 }
             }
-            .padding()
+            .background(Color.white.opacity(0.7))
+            .cornerRadius(20)
+            .padding(10)
             .onAppear {
                 days = date.calendarDisplayDays
                 updateEntriesDatesIfNeeded()
@@ -76,9 +78,13 @@ struct CalendarView: View {
                 ForEach(moodEntries, id: \.self) { entry in
                     if Calendar.current.isDate(entry.date ?? Date(), inSameDayAs: date) {
                         EntryView(entry: entry, isReload: $isReload)
+                            .listRowBackground(Color.clear)
                     }
                 }.onDelete(perform: deleteEntries)
             }
+            .listStyle(PlainListStyle())
+            .background(Color.clear)
+            .cornerRadius(20)
         }
         .padding()
         .navigationTitle("Mood Calendar")
@@ -89,6 +95,9 @@ struct CalendarView: View {
             }
         }
         .id(fetchTrigger)
+        .background(
+            LinearGradient(gradient: Gradient(colors: [.purple, .blue]), startPoint: .leading, endPoint: .trailing)
+        )
     }
     
     private func updateEntriesDatesIfNeeded() {
