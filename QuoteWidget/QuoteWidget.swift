@@ -18,13 +18,13 @@ struct Provider: AppIntentTimelineProvider {
     private func getEntry(for configuration: ConfigurationAppIntent) async -> SimpleEntry {
             let selectedMood = configuration.mood
             do {
-                if let quote = try await APIService.shared.fetchQuote(forMood: selectedMood)?.first {
-                    return SimpleEntry(date: Date(), mood: selectedMood, quote: quote.quote ?? "No quote available", author: quote.author)
+                if let quote = try await APIService.shared.fetchQuote(forMood: selectedMood.rawValue)?.first {
+                    return SimpleEntry(date: Date(), mood: selectedMood.rawValue, quote: quote.quote ?? "No quote available", author: quote.author)
                 }
             } catch {
                 print("Error fetching quote: \(error)")
             }
-            return SimpleEntry(date: Date(), mood: selectedMood, quote: "Error fetching quote", author: "Unknown")
+        return SimpleEntry(date: Date(), mood: selectedMood.rawValue, quote: "Error fetching quote", author: "Unknown")
         }
 }
 
@@ -37,15 +37,17 @@ struct SimpleEntry: TimelineEntry {
 
 struct MoodQuoteWidgetEntryView : View {
     var entry: Provider.Entry
+    @Environment(\.widgetFamily) var widgetFamily
 
     var body: some View {
         VStack {
             Text("Mood: \(entry.mood.capitalized)")
-                .font(.headline)
+                .font(quoteFontSize)
+                .bold()
                 .padding(.bottom, 4)
             
-            Text("\"\(entry.quote)\"")
-                .font(.body)
+            Text("\(entry.quote)")
+                .font(quoteFontSize)
                 .italic()
             
             if let author = entry.author {
@@ -54,8 +56,21 @@ struct MoodQuoteWidgetEntryView : View {
                     .foregroundColor(.secondary)
             }
         }
-        .padding()
-        .background(Color.blue.opacity(0.2))
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        .font(.body)
+    }
+    
+    var quoteFontSize: Font {
+        switch widgetFamily {
+        case .systemSmall:
+            return .caption2 // Smaller font size for small widgets
+        case .systemMedium:
+            return .caption
+        case .systemLarge:
+            return .body // Larger font size for medium/large widgets
+        default:
+            return .body // Default font size
+        }
     }
 }
 
@@ -65,7 +80,7 @@ struct QuoteWidget: Widget {
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
             MoodQuoteWidgetEntryView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
+                .containerBackground(LinearGradient(gradient: Gradient(colors: [.purple, .blue]), startPoint: .leading, endPoint: .trailing).opacity(0.7), for: .widget)
         }
         .configurationDisplayName("Mood Quote Widget")
         .description("Select a mood and receive a quote to match it.")

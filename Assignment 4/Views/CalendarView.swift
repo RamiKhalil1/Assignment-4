@@ -114,6 +114,7 @@ struct CalendarView: View {
             let entry = moodEntries[index]
             PersistenceController.shared.deleteMoodEntry(entry)
         }
+        entriesDates.removeAll()
     }
 }
 
