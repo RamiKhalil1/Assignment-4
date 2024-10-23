@@ -40,39 +40,43 @@ struct CalendarView: View {
             }
             .padding()
             
-            LazyVGrid(columns: columns) {
-                ForEach(days, id: \.self) { day in
-                    if day.monthInt != date.monthInt {
-                        Text("")
-                    } else {
-                        let isCurrentDay = date.startOfDay == day.startOfDay
-                        let isEntryDate = entriesDates.contains(day)
-                        
-                        let backgroundColor: Color = isCurrentDay ? Color.red.opacity(0.2) :
+            VStack {
+                LazyVGrid(columns: columns) {
+                    ForEach(days, id: \.self) { day in
+                        if day.monthInt != date.monthInt {
+                            Text("")
+                        } else {
+                            let isCurrentDay = date.startOfDay == day.startOfDay
+                            let isEntryDate = entriesDates.contains(day)
+                            
+                            let backgroundColor: Color = isCurrentDay ? Color.red.opacity(0.2) :
                             isEntryDate ? Color.blue.opacity(0.2) :
                             Color.green.opacity(0.2)
-                        
-                        Text(day.formatted(.dateTime.day()))
-                            .fontWeight(.bold)
-                            .foregroundStyle(.secondary)
-                            .frame(maxWidth: .infinity, minHeight: 40)
-                            .background(
-                                Circle()
-                                    .foregroundColor(backgroundColor)
-                            )
-                        .onTapGesture {
-                            date = day.startOfDay
+                            
+                            Text(day.formatted(.dateTime.day()))
+                                .fontWeight(.bold)
+                                .foregroundStyle(.secondary)
+                                .frame(maxWidth: .infinity, minHeight: 40)
+                                .background(
+                                    Circle()
+                                        .foregroundColor(backgroundColor)
+                                )
+                                .onTapGesture {
+                                    date = day.startOfDay
+                                }
+                            
                         }
                     }
+                }
+                .padding(10)
+                .onAppear {
+                    days = date.calendarDisplayDays
+                    updateEntriesDatesIfNeeded()
                 }
             }
             .background(Color.white.opacity(0.7))
             .cornerRadius(20)
-            .padding(10)
-            .onAppear {
-                days = date.calendarDisplayDays
-                updateEntriesDatesIfNeeded()
-            }
+            .padding(5)
             
             List {
                 ForEach(moodEntries, id: \.self) { entry in
@@ -84,7 +88,7 @@ struct CalendarView: View {
             }
             .listStyle(PlainListStyle())
             .background(Color.clear)
-            .cornerRadius(20)
+            .cornerRadius(10)
         }
         .padding()
         .navigationTitle("Mood Calendar")
