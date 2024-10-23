@@ -92,11 +92,9 @@ struct CalendarView: View {
         }
         .padding()
         .navigationTitle("Mood Calendar")
-        .onChange(of: isReload) { newValue in
-            if newValue {
-                fetchTrigger = UUID()
-                isReload = false
-            }
+        .onChange(of: isReload) {
+            fetchTrigger = UUID()
+            isReload = false
         }
         .id(fetchTrigger)
         .background(
@@ -113,8 +111,8 @@ struct CalendarView: View {
         for index in offsets {
             let entry = moodEntries[index]
             PersistenceController.shared.deleteMoodEntry(entry)
+            entriesDates = getEntriesDate(moodEntries: moodEntries)
         }
-        entriesDates.removeAll()
     }
 }
 
