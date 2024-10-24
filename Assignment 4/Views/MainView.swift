@@ -3,6 +3,7 @@ import SwiftUI
 struct MainView: View {
     @StateObject private var quoteManager = QuoteViewModel()
     @State private var moodEntries = PersistenceController.shared.fetchMoodEntries()
+    @State private var navigateToSettings = false
 
     var body: some View {
         NavigationView {
@@ -11,6 +12,14 @@ struct MainView: View {
                     .ignoresSafeArea()
 
                 VStack(spacing: 20) {
+                    Image(systemName: "sun.max.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 80, height: 80)
+                        .foregroundColor(.white)
+                        .shadow(radius: 10)
+                        .padding(.top, 50)
+                    
                     Text("Daily Mood Journal")
                         .font(.system(size: 32, weight: .bold))
                         .foregroundColor(.white)
@@ -18,18 +27,33 @@ struct MainView: View {
 
                     NavigationLink(destination: CalendarView()) {
                         GradientButton(title: "View Calendar", systemImage: "calendar")
+                            .frame(maxWidth: .infinity, maxHeight: 50)
                     }
 
                     NavigationLink(destination: QuoteBasedOnMood()) {
                         GradientButton(title: "Generate Quote Based on Mood", systemImage: "lightbulb")
+                            .frame(maxWidth: .infinity, maxHeight: 50)
                     }
 
                     NavigationLink(destination: SavedEntriesView()) {
                         GradientButton(title: "View Saved Data", systemImage: "folder")
+                            .frame(maxWidth: .infinity, maxHeight: 50)
+                    }
+                    
+                    Button(action: {
+                        navigateToSettings = true
+                    }) {
+                        GradientButton(title: "Password Settings", systemImage: "gearshape")
+                            .frame(maxWidth: .infinity, maxHeight: 50)
                     }
                 }
-                .padding()
+                .padding(.horizontal)
             }
+            .background(
+                NavigationLink(destination: PasswordSettingsView(), isActive: $navigateToSettings) {
+                    EmptyView()
+                }
+            )
         }
     }
 }
@@ -49,7 +73,7 @@ struct GradientButton: View {
                 .foregroundColor(.white)
         }
         .padding()
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: 50)
         .background(
             LinearGradient(gradient: Gradient(colors: [.purple, .blue]), startPoint: .leading, endPoint: .trailing)
         )

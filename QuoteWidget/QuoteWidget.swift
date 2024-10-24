@@ -63,13 +63,13 @@ struct MoodQuoteWidgetEntryView : View {
     var quoteFontSize: Font {
         switch widgetFamily {
         case .systemSmall:
-            return .caption2 // Smaller font size for small widgets
+            return .caption2
         case .systemMedium:
             return .caption
         case .systemLarge:
-            return .body // Larger font size for medium/large widgets
+            return .body
         default:
-            return .body // Default font size
+            return .body
         }
     }
 }

@@ -5,6 +5,7 @@ struct QuoteBasedOnMood: View {
     @State private var showImagePicker = false
     @State private var selectedImage: UIImage?
     @State private var journalText: String = ""
+    @State private var showAlert = false //
     @StateObject private var quoteManager = QuoteViewModel()
 
     let categories = [
@@ -139,12 +140,20 @@ struct QuoteBasedOnMood: View {
                                 photo: selectedImage,
                                 journalText: journalText
                             )
+                            showAlert = true
                         }
                         .padding()
                         .background(Color.white.opacity(0.9))
                         .foregroundColor(.blue)
                         .cornerRadius(10)
                         .shadow(radius: 5)
+                        .alert(isPresented: $showAlert) {
+                            Alert(
+                                title: Text("Success"),
+                                message: Text("Entry saved successfully!"),
+                                dismissButton: .default(Text("OK"))
+                            )
+                        }
                         
                         NavigationLink(destination: SavedEntriesView()) {
                             Text("View Saved Data")

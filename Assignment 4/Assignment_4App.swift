@@ -3,11 +3,17 @@ import SwiftUI
 @main
 struct Assignment_4App: App {
     let persistenceController = PersistenceController.shared
+    @State private var isAuthenticated = false
+    @ObservedObject var passwordManager = PasswordManager()
 
     var body: some Scene {
         WindowGroup {
-            WelcomeView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            if passwordManager.isPasswordSet && !isAuthenticated {
+                PasswordPromptView(isAuthenticated: $isAuthenticated)
+            } else {
+                WelcomeView()
+                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            }
         }
     }
 }
