@@ -72,9 +72,14 @@ final class Assignment_4UITests: XCTestCase {
         
         let textEditorPassword = app.secureTextFields["Password"]
         XCTAssertTrue(textEditorPassword.exists, "The text field does not exist")
+        
+        textEditorPassword.tap()
+        textEditorPassword.typeText("123")
+        app.buttons["Unlock"].tap()
+        app.alerts["Error"].scrollViews.otherElements.buttons["OK"].tap()
+        
         textEditorPassword.tap()
         textEditorPassword.typeText("12345")
-        
         app.buttons["Unlock"].tap()
         sleep(2)
         app.buttons["Password Settings"].tap()
