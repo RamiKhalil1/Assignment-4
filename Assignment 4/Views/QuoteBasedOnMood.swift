@@ -70,6 +70,7 @@ struct QuoteBasedOnMood: View {
                                 .padding()
                                 .background(Color.white.opacity(0.2))
                                 .cornerRadius(10)
+                                .accessibilityIdentifier("journalTextEditor")
                         }
                                             
                     

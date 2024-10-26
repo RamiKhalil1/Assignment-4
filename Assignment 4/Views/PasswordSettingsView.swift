@@ -32,7 +32,9 @@ struct PasswordSettingsView: View {
                 } else {
                     Section(header: Text("Set Password")) {
                         SecureField("New Password", text: $newPassword)
+                            .accessibilityIdentifier("newPassword")
                         SecureField("Confirm New Password", text: $confirmPassword)
+                            .accessibilityIdentifier("confirmPassword")
                         
                         Button("Set Password") {
                             setPassword()

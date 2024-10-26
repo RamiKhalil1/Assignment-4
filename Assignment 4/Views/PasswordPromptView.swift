@@ -36,6 +36,7 @@ struct PasswordPromptView: View {
                     .foregroundColor(.white)
                     .font(.system(size: 18, weight: .medium))
                     .shadow(radius: 5)
+                    .accessibilityIdentifier("Password")
                 
                 Button(action: authenticate) {
                     Text("Unlock")

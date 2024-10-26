@@ -53,6 +53,7 @@ struct MonthYearPickerView: View {
                 }
                 .background(Color.white.opacity(0.7))
                 .cornerRadius(10)
+                .accessibilityIdentifier("monthYearButton")
             }
 
             Spacer()
