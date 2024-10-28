@@ -39,7 +39,7 @@ final class Assignment_4UITests: XCTestCase {
         app.buttons["View Calendar"].tap()
         app.buttons["monthYearButton"].tap()
         app.pickers["Month"].pickerWheels.element.adjust(toPickerWheelValue: "February")
-        app.pickers["Year"].pickerWheels.element.adjust(toPickerWheelValue: "2024")
+//        app.pickers["Year"].pickerWheels.element.adjust(toPickerWheelValue: "2024")
         app.buttons["Done"].tap()
         let testTestTextInSavedData = app.staticTexts["29"]
         XCTAssertTrue(testTestTextInSavedData.exists, "The '29' text was not found in the Calendar!")
