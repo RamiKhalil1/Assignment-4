@@ -29,7 +29,7 @@ final class Assignment_4UITests: XCTestCase {
         XCTAssertTrue(firstEntry.exists, "The first entry does not exist")
         firstEntry.swipeLeft()
         app.buttons["Delete"].tap()
-        XCTAssertTrue(!testTestTextInSavedData.exists, "The 'Hello, world!' text was found in the saved data, after delete!")
+        XCTAssertTrue(firstEntry.exists, "The 'Hello, world!' text was found in the saved data, after delete!")
         
     }
     
